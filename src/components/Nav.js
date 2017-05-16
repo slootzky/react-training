@@ -17,6 +17,18 @@ const Nav = () => (
       <NavLink activeClassName="active" to="/popular">
         Popular
       </NavLink>
+
+
+
+
+
+
+
+
+
+
+
+
     </li>
   </ul>
 );
