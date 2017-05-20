@@ -18,17 +18,6 @@ const Nav = () => (
         Popular
       </NavLink>
 
-
-
-
-
-
-
-
-
-
-
-
     </li>
   </ul>
 );
