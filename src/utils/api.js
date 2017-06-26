@@ -26,7 +26,7 @@ const handleError = error => {
 
 const getUserData = player => {
   return axios.all([getProfile(player), getRepos(player)]).then(result => {
-    let profile = result[0];
+    let profile = result[0].data;
     let repos = result[1];
 
     return {
@@ -36,7 +36,7 @@ const getUserData = player => {
   });
 };
 const calculateScore = (profile, repos) => {
-  let followers = profile.data.followers;
+  let followers = profile.followers;
   let totalStars = getStarCount(repos);
   return followers * 3 + totalStars;
 };
