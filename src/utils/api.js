@@ -1,7 +1,8 @@
 import axios from 'axios';
 let id = 'YOUR_CLIENT_ID';
 let sec = 'YOUR_SECRET_REQUEST';
-let params = `?client_id=${id}&client_secret=${sec}`;
+let params = '?';
+// let params = `?client_id=${id}&client_secret=${sec}`;
 const githubBaseUrl = `https://api.github.com/`;
 
 const getProfile = username => {
@@ -19,12 +20,12 @@ const getStarCount = repos => {
 };
 
 const handleError = error => {
-  console.warn(error);
+  console.error(error);
   return null;
 };
 
 const getUserData = player => {
-  axios.all([getProfile(player), getRepos(player)]).then(result => {
+  return axios.all([getProfile(player), getRepos(player)]).then(result => {
     let profile = result[0];
     let repos = result[1];
 
@@ -44,7 +45,7 @@ const sortPlayers = players => {
   return players.sort((a, b) => b.score - a.score);
 };
 export const battle = players => {
-  return axios.all([players.map(getUserData)]).then(sortPlayers).catch(handleError);
+  return axios.all(players.map(getUserData)).then(sortPlayers).catch(handleError);
 };
 
 export default {
