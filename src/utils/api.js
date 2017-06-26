@@ -36,7 +36,7 @@ const getUserData = player => {
   });
 };
 const calculateScore = (profile, repos) => {
-  let followers = profile.followers;
+  let followers = profile.data.followers;
   let totalStars = getStarCount(repos);
   return followers * 3 + totalStars;
 };
