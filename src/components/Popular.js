@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTyps from 'prop-types';
 import api from '../utils/api';
+import {withState,compose} from 'recompose';
 
 const RepoGrid = props => {
   return (
@@ -52,42 +53,34 @@ SelectLanguage.PropTypes = {
 };
 
 class Popular extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedLanguage: 'All',
-      repos: null,
-    };
-
-    this.updateLanguage = this.updateLanguage.bind(this);
-  }
-
-  updateLanguage(lang) {
-    this.setState(() => ({
-      selectedLanguage: lang,
-      repos: null,
-    }));
+  languageWasUpdated(lang){
+    this.props.updateRepos(null);
 
     api.fetchPopularRepos(lang).then(repos => {
-      this.setState(() => ({
-        repos,
-      }));
+      this.props.updateRepos(repos);
     });
   }
 
   componentDidMount() {
-    this.updateLanguage(this.state.selectedLanguage);
+    this.languageWasUpdated(this.props.selectedLanguage);
   }
 
   render() {
     return (
       <div>
-        <SelectLanguage selectedLanguage={this.state.selectedLanguage} onSelect={this.updateLanguage} />
-        {!this.state.repos ? <p>LOADING</p> : <RepoGrid repos={this.state.repos} />}
+        <SelectLanguage selectedLanguage={this.props.selectedLanguage} onSelect={(lang)=>{
+          this.props.updateLanguage(lang);
+          this.languageWasUpdated(lang);
+        }} />
+        {!this.props.repos ? <p>LOADING</p> : <RepoGrid repos={this.props.repos} />}
 
       </div>
     );
   }
 }
 
-export default Popular;
+const enhace = compose(withState('repos','updateRepos',null),withState('selectedLanguage','updateLanguage','All')
+
+);
+
+export default enhace(Popular);
